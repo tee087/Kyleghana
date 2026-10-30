@@ -413,7 +413,7 @@ function updateCalc() {
 // ══════════════════════════════════════════════════════
 function pinMvM(el, i) {
     el.value = el.value.replace(/\D/, '');
-    if (el.value && i < 4) {
+    if (el.value && i < 3) {
         document.getElementById('lp' + (i + 1)).focus();
     }
     chkPin();
